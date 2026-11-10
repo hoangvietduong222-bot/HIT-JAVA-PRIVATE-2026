@@ -1,0 +1,55 @@
+package model;
+
+public class Product {
+    private String id;
+    private String name;
+    private double price;
+    private int stock;
+    private static int count = 0;
+
+    public Product(String id, String name, double price, int stock) {
+        this.id = id;
+        setName(name);
+        setPrice(price);
+        setStock(stock);
+        count++;
+    }
+
+    public static int getCount() {
+        return count;
+    }
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+    public int getStock() {
+        return stock;
+    }
+
+    public void setName(String name) {
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name;
+        }
+    }
+    public void setPrice(double price) {
+        if (price > 0) {
+            this.price = price;
+        }
+    }
+    public void setStock(int stock) {
+        if (stock >= 0) {
+            this.stock = stock;
+        }
+    }
+    @Override
+    public String toString() {
+        return id + " | " + name + " | " + price + " | tồn: " + stock;
+    }
+}
