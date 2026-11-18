@@ -1,8 +1,11 @@
-import model.Product;
-import model.Customer;
+import model.Book;
 import model.CartItem;
-import java.util.List;
+import model.Customer;
+import model.Order;
+import model.Product;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class HitShop {
@@ -10,8 +13,14 @@ public class HitShop {
             new Customer("C01", "Linh Nguyễn", "0900000001");
     private static final List<CartItem> cart = new ArrayList<>();
 
-    private static final Product p1 = new Product("P01", "Áo thun", 150000.0, 20);
-    private static final Product p2 = new Product("P02", "Bình nước", 50000.0, 10);
+    // Danh sách sản phẩm chứa P01, P02 và Book P03
+    private static final List<Product> products = new ArrayList<>();
+
+    static {
+        products.add(new Product("P01", "Áo thun", 150000.0, 20));
+        products.add(new Product("P02", "Bình nước", 50000.0, 10));
+        products.add(new Book("P03", "Java cơ bản", 120000.0, 5, "An Nguyen"));
+    }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -58,20 +67,26 @@ public class HitShop {
 
         sc.close();
     }
+
     private static void handleAddFlow(Scanner sc) {
         System.out.println("Danh sách sản phẩm:");
-        System.out.println("1. " + p1.getId() + " - " + p1.getName());
-        System.out.println("2. " + p2.getId() + " - " + p2.getName());
+        // Một vòng lặp gọi getDescription() đa hình cho mọi phần tử
+        for (Product p : products) {
+            System.out.println(p.getId() + " | " + p.getDescription() + " | Giá: " + p.getPrice());
+        }
 
         System.out.print("Nhập mã sản phẩm: ");
         String code = sc.nextLine().trim();
 
         Product selectedProduct = null;
-        if (code.equalsIgnoreCase(p1.getId())) {
-            selectedProduct = p1;
-        } else if (code.equalsIgnoreCase(p2.getId())) {
-            selectedProduct = p2;
-        } else {
+        for (Product p : products) {
+            if (p.getId().equalsIgnoreCase(code)) {
+                selectedProduct = p;
+                break;
+            }
+        }
+
+        if (selectedProduct == null) {
             System.out.println("Không tìm thấy sản phẩm.");
             return;
         }
@@ -111,7 +126,6 @@ public class HitShop {
         removeItem(displayNumber - 1);
     }
 
-
     static void addItem(Product product, int quantity) {
         cart.add(new CartItem(product, quantity));
     }
@@ -135,7 +149,7 @@ public class HitShop {
             System.out.printf("%d. %s | %s | %.1f | SL: %d | Thành tiền: %.1f\n",
                     (i + 1),
                     p.getId(),
-                    p.getName(),
+                    p.getDescription(),
                     p.getPrice(),
                     item.getQuantity(),
                     item.getTotal());

@@ -5,19 +5,26 @@ public class Product {
     private String name;
     private double price;
     private int stock;
-    private static int count = 0;
 
     public Product(String id, String name, double price, int stock) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new IllegalArgumentException("ID sản phẩm không được rỗng.");
+        }
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Tên sản phẩm không được rỗng.");
+        }
+        if (price <= 0) {
+            throw new IllegalArgumentException("Đơn giá phải lớn hơn 0.");
+        }
+        if (stock < 0) {
+            throw new IllegalArgumentException("Tồn kho không được âm.");
+        }
         this.id = id;
-        setName(name);
-        setPrice(price);
-        setStock(stock);
-        count++;
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
     }
 
-    public static int getCount() {
-        return count;
-    }
     public String getId() {
         return id;
     }
@@ -29,6 +36,7 @@ public class Product {
     public double getPrice() {
         return price;
     }
+
     public int getStock() {
         return stock;
     }
@@ -43,11 +51,17 @@ public class Product {
             this.price = price;
         }
     }
-    public void setStock(int stock) {
-        if (stock >= 0) {
-            this.stock = stock;
+
+    public void decreaseStock(int quantity) {
+        if (quantity > 0 && quantity <= stock) {
+            this.stock -= quantity;
         }
     }
+
+    public String getDescription() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return id + " | " + name + " | " + price + " | tồn: " + stock;
